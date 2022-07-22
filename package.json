@@ -1,6 +1,6 @@
 {
-  "name": "json-schema-editor-visual",
-  "version": "2.0.0",
+  "name": "json-schema-editor-visual-yc",
+  "version": "1.0.14",
   "description": "jsonschema editor",
   "main": "package/index.js",
   "license": "MIC",
@@ -9,14 +9,18 @@
     "demo": "NODE_ENV=production ykit pack -m",
     "build": "NODE_ENV=production webpack"
   },
+  "peerDependencies": {
+    "react": ">=16",
+    "react-dom": "^16.0.1"
+  },
   "dependencies": {
-    "@ant-design/icons": "^4.2.1",
-    "antd": "^4",
+    "@ant-design/icons": "^4.7.0",
+    "antd": "^4.21.7",
     "brace": "^0.10.0",
     "generate-schema": "^2.6.0",
     "moox": "^1.0.2",
-    "react": "^16.13.1",
-    "react-dom": "^16.13.1",
+    "react": "^17.0.0",
+    "react-dom": "^17.0.0",
     "react-redux": "^5.0.6",
     "redux": "^4.1.2",
     "underscore": "^1.8.3"
