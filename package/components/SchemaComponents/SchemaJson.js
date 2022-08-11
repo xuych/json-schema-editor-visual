@@ -172,7 +172,9 @@ class SchemaArray extends PureComponent {
                 </Col>
                 <Col span={22}>
                   <Input
-                    addonAfter={<Checkbox disabled />}
+                    addonAfter={
+                      <Checkbox disabled={this.context.isInputDisabled} />
+                    }
                     disabled
                     value="Items"
                   />
@@ -185,6 +187,7 @@ class SchemaArray extends PureComponent {
                 className="type-select-style"
                 onChange={this.handleChangeType}
                 value={items.type}
+                disabled={this.context.isInputDisabled}
               >
                 {SCHEMA_TYPE.map((item, index) => {
                   return (
@@ -201,6 +204,7 @@ class SchemaArray extends PureComponent {
                   schema={items}
                   showEdit={() => this.handleShowEdit("mock", items.type)}
                   onChange={this.handleChangeMock}
+                  disabled={this.context.isMockDisabled}
                 />
               </Col>
             )}
@@ -215,6 +219,7 @@ class SchemaArray extends PureComponent {
                 placeholder={LocaleProvider("title")}
                 value={items.title}
                 onChange={this.handleChangeTitle}
+                disabled={this.context.isInputDisabled}
               />
             </Col>
             <Col
@@ -230,29 +235,36 @@ class SchemaArray extends PureComponent {
                 placeholder={LocaleProvider("description")}
                 value={items.description}
                 onChange={this.handleChangeDesc}
+                disabled={this.context.isInputDisabled}
               />
             </Col>
-            <Col
-              span={this.context.isMock ? 2 : 3}
-              className="col-item col-item-setting"
-            >
-              <span className="adv-set" onClick={this.handleShowAdv}>
-                <Tooltip placement="top" title={LocaleProvider("adv_setting")}>
-                  <SettingOutlined />
-                </Tooltip>
-              </span>
-
-              {items.type === "object" ? (
-                <span onClick={this.handleAddChildField}>
-                  <Tooltip
-                    placement="top"
-                    title={LocaleProvider("add_child_node")}
-                  >
-                    <PlusOutlined className="plus" />
-                  </Tooltip>
-                </span>
-              ) : null}
-            </Col>
+            {!this.context.isInputDisabled && (
+              <Col
+                span={this.context.isMock ? 2 : 3}
+                className="col-item col-item-setting"
+              >
+                {this.context.isAllowSetting && (
+                  <span className="adv-set" onClick={this.handleShowAdv}>
+                    <Tooltip
+                      placement="top"
+                      title={LocaleProvider("adv_setting")}
+                    >
+                      <SettingOutlined />
+                    </Tooltip>
+                  </span>
+                )}
+                {items.type === "object" ? (
+                  <span onClick={this.handleAddChildField}>
+                    <Tooltip
+                      placement="top"
+                      title={LocaleProvider("add_child_node")}
+                    >
+                      <PlusOutlined className="plus" />
+                    </Tooltip>
+                  </span>
+                ) : null}
+              </Col>
+            )}
           </Row>
           <div className="option-formStyle">
             {mapping(prefixArray, items, showEdit, showAdv)}
@@ -267,6 +279,9 @@ SchemaArray.contextTypes = {
   getOpenValue: PropTypes.func,
   Model: PropTypes.object,
   isMock: PropTypes.bool,
+  isInputDisabled: PropTypes.bool,
+  isMockDisabled: PropTypes.bool,
+  isAllowSetting: PropTypes.bool,
 };
 
 class SchemaItem extends PureComponent {
@@ -424,11 +439,13 @@ class SchemaItem extends PureComponent {
                             ? false
                             : data.required.indexOf(name) != -1
                         }
+                        disabled={this.context.isInputDisabled}
                       />
                     </Tooltip>
                   }
                   onChange={this.handleChangeName}
                   value={name}
+                  disabled={this.context.isInputDisabled}
                 />
               </Col>
             </Row>
@@ -439,6 +456,7 @@ class SchemaItem extends PureComponent {
               className="type-select-style"
               onChange={this.handleChangeType}
               value={value.type}
+              disabled={this.context.isInputDisabled}
             >
               {SCHEMA_TYPE.map((item, index) => {
                 return (
@@ -465,6 +483,7 @@ class SchemaItem extends PureComponent {
                 schema={value}
                 showEdit={() => this.handleShowEdit("mock", value.type)}
                 onChange={this.handleChangeMock}
+                disabled={this.context.isMockDisabled}
               />
             </Col>
           )}
@@ -480,6 +499,7 @@ class SchemaItem extends PureComponent {
               placeholder={LocaleProvider("title")}
               value={value.title}
               onChange={this.handleChangeTitle}
+              disabled={this.context.isInputDisabled}
             />
           </Col>
 
@@ -496,18 +516,23 @@ class SchemaItem extends PureComponent {
               placeholder={LocaleProvider("description")}
               value={value.description}
               onChange={this.handleChangeDesc}
+              disabled={this.context.isInputDisabled}
             />
           </Col>
 
           <Col
             span={this.context.isMock ? 2 : 3}
-            className="col-item col-item-setting"
+            className={`col-item col-item-setting ${
+              this.context.isInputDisabled && "hidden"
+            }`}
           >
-            <span className="adv-set" onClick={this.handleShowAdv}>
-              <Tooltip placement="top" title={LocaleProvider("adv_setting")}>
-                <SettingOutlined />
-              </Tooltip>
-            </span>
+            {this.context.isAllowSetting && (
+              <span className="adv-set" onClick={this.handleShowAdv}>
+                <Tooltip placement="top" title={LocaleProvider("adv_setting")}>
+                  <SettingOutlined />
+                </Tooltip>
+              </span>
+            )}
             <span className="delete-item" onClick={this.handleDeleteItem}>
               <CloseOutlined className="close" />
             </span>
@@ -537,6 +562,9 @@ SchemaItem.contextTypes = {
   getOpenValue: PropTypes.func,
   Model: PropTypes.object,
   isMock: PropTypes.bool,
+  isMockDisabled: PropTypes.bool,
+  isInputDisabled: PropTypes.bool,
+  isAllowSetting: PropTypes.bool,
 };
 
 class SchemaObjectComponent extends Component {

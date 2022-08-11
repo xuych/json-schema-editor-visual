@@ -123,6 +123,10 @@ class jsonSchema extends React.Component {
       changeCustomValue: this.changeCustomValue,
       Model: this.props.Model,
       isMock: this.props.isMock,
+      isInputDisabled: this.props.isInputDisabled,
+      isMockDisabled: this.props.isMockDisabled,
+      isAllowJson: this.props.isAllowJson,
+      isAllowSetting: this.props.isAllowSetting,
     };
   }
 
@@ -285,7 +289,7 @@ class jsonSchema extends React.Component {
 
     return (
       <div className="json-schema-react-editor">
-        {false && (
+        {this.props.isAllowJson && (
           <Button
             className="import-json-button"
             type="primary"
@@ -417,7 +421,7 @@ class jsonSchema extends React.Component {
                         <Tooltip placement="top" title={"checked_all"}>
                           <Checkbox
                             checked={checked}
-                            disabled={disabled}
+                            disabled={this.props.isInputDisabled}
                             onChange={(e) =>
                               this.changeCheckBox(e.target.checked)
                             }
@@ -435,6 +439,7 @@ class jsonSchema extends React.Component {
                   className="type-select-style"
                   onChange={(e) => this.changeType(`type`, e)}
                   value={schema.type || "object"}
+                  disabled={this.props.isInputDisabled}
                 >
                   {SCHEMA_TYPE.map((item, index) => {
                     return (
@@ -448,10 +453,7 @@ class jsonSchema extends React.Component {
               {this.props.isMock && (
                 <Col span={3} className="col-item col-item-mock">
                   <MockSelect
-                    schema={schema}
-                    showEdit={() =>
-                      this.showEdit([], "mock", schema.mock, schema.type)
-                    }
+                    schema={this.props.schema.mock}
                     onChange={(value) => this.changeValue(["mock"], value)}
                   />
                 </Col>
@@ -471,6 +473,7 @@ class jsonSchema extends React.Component {
                   placeholder={LocalProvider("title")}
                   value={this.props.schema.title}
                   onChange={(e) => this.changeValue(["title"], e.target.value)}
+                  disabled={this.props.isInputDisabled}
                 />
               </Col>
               <Col
@@ -488,6 +491,7 @@ class jsonSchema extends React.Component {
                           this.props.schema.description
                         )
                       }
+                      disabled={this.props.isInputDisabled}
                     />
                   }
                   placeholder={LocalProvider("description")}
@@ -495,28 +499,36 @@ class jsonSchema extends React.Component {
                   onChange={(e) =>
                     this.changeValue(["description"], e.target.value)
                   }
+                  disabled={this.props.isInputDisabled}
                 />
               </Col>
-              <Col span={2} className="col-item col-item-setting">
-                <span
-                  className="adv-set"
-                  onClick={() => this.showAdv([], this.props.schema)}
-                >
-                  <Tooltip placement="top" title={LocalProvider("adv_setting")}>
-                    <SettingOutlined />
-                  </Tooltip>
-                </span>
-                {schema.type === "object" ? (
-                  <span onClick={() => this.addChildField("properties")}>
-                    <Tooltip
-                      placement="top"
-                      title={LocalProvider("add_child_node")}
+              {!this.props.isInputDisabled && (
+                <Col span={2} className="col-item col-item-setting">
+                  {this.props.isAllowSetting && (
+                    <span
+                      className="adv-set"
+                      onClick={() => this.showAdv([], this.props.schema)}
                     >
-                      <PlusOutlined className="plus" />
-                    </Tooltip>
-                  </span>
-                ) : null}
-              </Col>
+                      <Tooltip
+                        placement="top"
+                        title={LocalProvider("adv_setting")}
+                      >
+                        <SettingOutlined />
+                      </Tooltip>
+                    </span>
+                  )}
+                  {schema.type === "object" ? (
+                    <span onClick={() => this.addChildField("properties")}>
+                      <Tooltip
+                        placement="top"
+                        title={LocalProvider("add_child_node")}
+                      >
+                        <PlusOutlined className="plus" />
+                      </Tooltip>
+                    </span>
+                  ) : null}
+                </Col>
+              )}
             </Row>
             {this.state.show && (
               <SchemaJson
@@ -537,6 +549,10 @@ jsonSchema.childContextTypes = {
   changeCustomValue: PropTypes.func,
   Model: PropTypes.object,
   isMock: PropTypes.bool,
+  isInputDisabled: PropTypes.bool,
+  isMockDisabled: PropTypes.bool,
+  isAllowJson: PropTypes.bool,
+  isAllowSetting: PropTypes.bool,
 };
 
 jsonSchema.propTypes = {
@@ -544,6 +560,10 @@ jsonSchema.propTypes = {
   onChange: PropTypes.func,
   showEditor: PropTypes.bool,
   isMock: PropTypes.bool,
+  isMockDisabled: PropTypes.bool,
+  isInputDisabled: PropTypes.bool,
+  isAllowJson: PropTypes.bool,
+  isAllowSetting: PropTypes.bool,
   Model: PropTypes.object,
 };
 

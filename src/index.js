@@ -2,8 +2,9 @@ import React from "react";
 import { render } from "react-dom";
 import "antd/dist/antd.css";
 
-const jeditor = require("../dist/main");
+const jeditor = require("../dist/main.js");
 import "../dist/main.css";
+
 // import "../package/index.css";
 // const jeditor = require("../package/index.js");
 const mock = [
@@ -39,7 +40,7 @@ render(
     </p>
     <br />
     <h3>
-      The tool has been used for open source api management platforms：{" "}
+      A The tool has been used for open source api management platforms：{" "}
       <a target="_blank" href="https://github.com/ymfe/yapi">
         YApi
       </a>
@@ -50,8 +51,15 @@ render(
     <hr />
 
     <JEditor1
+      isAllowSetting={false}
+      isAllowJson={false}
+      data={
+        '{"type":"object","title":"root","properties":{"id":{"description":"","type":"string","title":"123","mock": { "mock": "@string" }}},"required":["id"]}'
+      }
       showEditor={true}
       isMock={true}
+      isMockDisabled={false}
+      isInputDisabled={false}
       onChange={(e) => {
         console.log("changeValue---", e);
       }}

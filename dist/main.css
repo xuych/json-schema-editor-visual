@@ -50,15 +50,14 @@
 
 .json-schema-react-editor .certain-category-search .ant-select-search__field__wrap {
   display: unset;
-}
-.json-schema-react-editor .option-formStyle{
+}.json-schema-react-editor .option-formStyle{
   /* padding-left: 25px; */
   padding-Top: 8px
 }
 
 .json-schema-react-editor .required-icon {
   font-size: 1em;
-  color: red;
+  color:#e70021;
   font-weight: bold;
   padding-left: 5px
 }
@@ -97,11 +96,11 @@
 }
 
 .json-schema-react-editor .plus {
-  color: #2395f1
+  color:#e70021;
 }
 
 .json-schema-react-editor .close {
-  color: #ff561b
+  color: #ff9d25;
 }
 
 .json-schema-react-editor .array-type {
@@ -144,7 +143,7 @@
 
 .json-schema-react-editor .adv-set {
   padding-right: 8px;
-  color: #00a854;
+  color: #52c41a;
 }
 
 .json-schema-react-editor .type-select-style {
@@ -168,7 +167,7 @@
   font-size: 16px;
   font-weight: 400;
   margin-bottom: 16px;
-  border-left: 3px solid #2395f1;
+  border-left: 3px solid#e70021;
   padding-left: 8px;
 }
 
@@ -190,4 +189,17 @@
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+.input_icon_editor {
+  cursor: pointer;
+}
+
+.input_icon_editor_disabled,.input_icon_editor_disabled * {
+  cursor: not-allowed;
+}
+
+.hidden{
+  visibility: hidden;
+  /* display: none; */
 }

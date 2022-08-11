@@ -1,14 +1,15 @@
-import React from 'react';
-import { Input, AutoComplete, Icon } from 'antd';
-import PropTypes from 'prop-types';
+import React from "react";
+import { Input, AutoComplete, Icon } from "antd";
+import PropTypes from "prop-types";
 const Option = AutoComplete.Option;
-import LocaleProvider from '../LocalProvider/index.js';
+import { EditOutlined } from "@ant-design/icons";
+import LocaleProvider from "../LocalProvider/index.js";
 
 export default class MockSelect extends React.Component {
   constructor(props, context) {
     super(props);
     this.state = {
-      mock: ''
+      mock: "",
     };
     this.mock = context.Model.__jsonSchemaMock || [];
   }
@@ -16,28 +17,48 @@ export default class MockSelect extends React.Component {
   static propTypes = {
     schema: PropTypes.object,
     showEdit: PropTypes.func,
-    onChange: PropTypes.func
+    onChange: PropTypes.func,
   };
 
   render() {
     // const children = [];
     const { schema } = this.props;
-    const children = this.mock.map((item) => <Option key={item.mock}>{item.mock}</Option>);
+    const children = this.mock.map((item) => ({
+      label: item.name,
+      value: item.mock,
+    }));
 
     return (
-      <div>
+      <div style={{ width: "100%" }}>
         <AutoComplete
+          style={{ width: "100%" }}
           className="certain-category-search"
           dropdownMatchSelectWidth={false}
-          dataSource={children}
-          placeholder={LocaleProvider('mock')}
-          optionLabelProp="value"
+          options={children}
           filterOption={true}
-          value={schema.mock ? schema.mock.mock : ''}
+          value={
+            schema.mock
+              ? schema.mock.constructor === Object
+                ? schema.mock.mock
+                : schema.mock
+              : ""
+          }
           onChange={this.props.onChange}
-          disabled={schema.type === 'object' || schema.type === 'array'}
+          disabled={
+            ["object", "array"].includes(schema.type) || this.props.disabled
+          }
         >
-          <Input addonAfter={<Icon type="edit" onClick={(e) => {e.stopPropagation(); this.props.showEdit()}} />} />
+          <Input
+            placeholder={LocaleProvider("mock")}
+            addonAfter={
+              <EditOutlined
+                onClick={(e) => {
+                  e.stopPropagation();
+                  this.props.showEdit();
+                }}
+              />
+            }
+          />
         </AutoComplete>
       </div>
     );
@@ -45,5 +66,5 @@ export default class MockSelect extends React.Component {
 }
 
 MockSelect.contextTypes = {
-  Model: PropTypes.object
+  Model: PropTypes.object,
 };

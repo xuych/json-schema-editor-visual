@@ -37,6 +37,18 @@ render(
 | `onChange`| function | null |
 | `showEditor` | boolean | false |
 
+## Features
+
+* Languages syntax config optimization
+* Provide isAllowJson prop
+* Provide isAllowSetting prop
+* Provide isMockDisabled prop
+* Provide isInputDisabled prop
+* Fix mock function error when in production mode
+* Fix react version conflict
+* others ...
+
 ## Links
 
-<https://github.com/zyqwst/json-schema-editor-vue>
+* <https://github.com/zyqwst/json-schema-editor-vue>
+* <https://github.com/Open-Federation/json-schema-editor-visual>

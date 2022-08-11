@@ -155,7 +155,7 @@ class SchemaString extends PureComponent {
               <Checkbox
                 checked={this.state.checked}
                 onChange={(e) => this.onChangeCheckBox(e.target.checked, data)}
-              />{" "}
+              />
               :
             </span>
           </Col>
@@ -424,7 +424,7 @@ class SchemaNumber extends PureComponent {
               <Checkbox
                 checked={this.state.checked}
                 onChange={(e) => this.onChangeCheckBox(e.target.checked, data)}
-              />{" "}
+              />
               :
             </span>
           </Col>
