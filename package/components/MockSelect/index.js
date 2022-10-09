@@ -50,14 +50,14 @@ export default class MockSelect extends React.Component {
         >
           <Input
             placeholder={LocaleProvider("mock")}
-            addonAfter={
-              <EditOutlined
-                onClick={(e) => {
-                  e.stopPropagation();
-                  this.props.showEdit();
-                }}
-              />
-            }
+            // addonAfter={
+            //   <EditOutlined
+            //     onClick={(e) => {
+            //       e.stopPropagation();
+            //       this.props.showEdit();
+            //     }}
+            //   />
+            // }
           />
         </AutoComplete>
       </div>

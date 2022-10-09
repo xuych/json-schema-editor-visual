@@ -38,7 +38,7 @@ const langs = {
     'mockLink': 'Help'
   },
   zh_CN: {
-    'title': '标题',
+    'title': '参数值',
     'import_json': '导入 json',
     'base_setting': '基础设置',
     'all_setting': '编辑源码',

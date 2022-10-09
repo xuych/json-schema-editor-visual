@@ -72,13 +72,14 @@ class jsonSchema extends React.Component {
       if (!this.jsonData) {
         return message.error("json 数据格式有误");
       }
-
+      console.log(this.jsonData, "GenerateSchema");
       let jsonData = GenerateSchema(this.jsonData);
       this.Model.changeEditorSchemaAction({ value: jsonData });
     } else {
       if (!this.jsonSchemaData) {
         return message.error("json 数据格式有误");
       }
+      console.log(this.jsonSchemaData, "GenerateSchema");
       this.Model.changeEditorSchemaAction({ value: this.jsonSchemaData });
     }
     this.setState({ visible: false });
@@ -280,8 +281,7 @@ class jsonSchema extends React.Component {
       checked,
       editorModalName,
     } = this.state;
-    const { schema } = this.props;
-
+    const { schema, isInputDisabled } = this.props;
     let disabled =
       this.props.schema.type === "object" || this.props.schema.type === "array"
         ? false
@@ -439,7 +439,7 @@ class jsonSchema extends React.Component {
                   className="type-select-style"
                   onChange={(e) => this.changeType(`type`, e)}
                   value={schema.type || "object"}
-                  disabled={this.props.isInputDisabled}
+                  disabled={isInputDisabled}
                 >
                   {SCHEMA_TYPE.map((item, index) => {
                     return (
@@ -453,8 +453,12 @@ class jsonSchema extends React.Component {
               {this.props.isMock && (
                 <Col span={3} className="col-item col-item-mock">
                   <MockSelect
-                    schema={this.props.schema.mock}
+                    schema={this.props.schema}
+                    showEdit={() =>
+                      this.showEdit([], "mock", schema.mock, schema.type)
+                    }
                     onChange={(value) => this.changeValue(["mock"], value)}
+                    disabled={this.props.isMockDisabled}
                   />
                 </Col>
               )}
@@ -463,17 +467,19 @@ class jsonSchema extends React.Component {
                 className="col-item col-item-mock"
               >
                 <Input
-                  addonAfter={
-                    <EditOutlined
-                      onClick={() =>
-                        this.showEdit([], "title", this.props.schema.title)
-                      }
-                    />
-                  }
+                  // addonAfter={
+                  //   <EditOutlined
+                  //     onClick={() =>
+                  //       this.showEdit([], "title", this.props.schema.title)
+                  //     }
+                  //   />
+                  // }
                   placeholder={LocalProvider("title")}
                   value={this.props.schema.title}
                   onChange={(e) => this.changeValue(["title"], e.target.value)}
-                  disabled={this.props.isInputDisabled}
+                  disabled={["array", "object"].includes(
+                    this.props.schema.type
+                  )}
                 />
               </Col>
               <Col
@@ -481,54 +487,53 @@ class jsonSchema extends React.Component {
                 className="col-item col-item-desc"
               >
                 <Input
-                  addonAfter={
-                    <EditOutlined
-                      type="edit"
-                      onClick={() =>
-                        this.showEdit(
-                          [],
-                          "description",
-                          this.props.schema.description
-                        )
-                      }
-                      disabled={this.props.isInputDisabled}
-                    />
-                  }
+                  // addonAfter={
+                  //   <EditOutlined
+                  //     type="edit"
+                  //     onClick={() =>
+                  //       this.showEdit(
+                  //         [],
+                  //         "description",
+                  //         this.props.schema.description
+                  //       )
+                  //     }
+                  //     disabled={isInputDisabled}
+                  //   />
+                  // }
                   placeholder={LocalProvider("description")}
                   value={schema.description}
                   onChange={(e) =>
                     this.changeValue(["description"], e.target.value)
                   }
-                  disabled={this.props.isInputDisabled}
+                  disabled={isInputDisabled}
                 />
               </Col>
-              {!this.props.isInputDisabled && (
-                <Col span={2} className="col-item col-item-setting">
-                  {this.props.isAllowSetting && (
-                    <span
-                      className="adv-set"
-                      onClick={() => this.showAdv([], this.props.schema)}
+
+              <Col span={2} className="col-item col-item-setting">
+                {this.props.isAllowSetting && (
+                  <span
+                    className="adv-set"
+                    onClick={() => this.showAdv([], this.props.schema)}
+                  >
+                    <Tooltip
+                      placement="top"
+                      title={LocalProvider("adv_setting")}
                     >
-                      <Tooltip
-                        placement="top"
-                        title={LocalProvider("adv_setting")}
-                      >
-                        <SettingOutlined />
-                      </Tooltip>
-                    </span>
-                  )}
-                  {schema.type === "object" ? (
-                    <span onClick={() => this.addChildField("properties")}>
-                      <Tooltip
-                        placement="top"
-                        title={LocalProvider("add_child_node")}
-                      >
-                        <PlusOutlined className="plus" />
-                      </Tooltip>
-                    </span>
-                  ) : null}
-                </Col>
-              )}
+                      <SettingOutlined />
+                    </Tooltip>
+                  </span>
+                )}
+                {schema.type === "object" && !isInputDisabled ? (
+                  <span onClick={() => this.addChildField("properties")}>
+                    <Tooltip
+                      placement="top"
+                      title={LocalProvider("add_child_node")}
+                    >
+                      <PlusOutlined className="plus" />
+                    </Tooltip>
+                  </span>
+                ) : null}
+              </Col>
             </Row>
             {this.state.show && (
               <SchemaJson

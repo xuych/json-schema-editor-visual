@@ -138,12 +138,14 @@ class SchemaArray extends PureComponent {
   render() {
     const { data, prefix, showEdit, showAdv } = this.props;
     const items = data.items;
+    console.log(items, "items");
     let prefixArray = [].concat(prefix, "items");
 
     let prefixArrayStr = []
       .concat(prefixArray, "properties")
       .join(JSONPATH_JOIN_CHAR);
     let showIcon = this.context.getOpenValue([prefixArrayStr]);
+    const { isInputDisabled } = this.context;
     return (
       !_.isUndefined(data.items) && (
         <div className="array-type">
@@ -172,9 +174,7 @@ class SchemaArray extends PureComponent {
                 </Col>
                 <Col span={22}>
                   <Input
-                    addonAfter={
-                      <Checkbox disabled={this.context.isInputDisabled} />
-                    }
+                    addonAfter={<Checkbox disabled={isInputDisabled} />}
                     disabled
                     value="Items"
                   />
@@ -187,7 +187,7 @@ class SchemaArray extends PureComponent {
                 className="type-select-style"
                 onChange={this.handleChangeType}
                 value={items.type}
-                disabled={this.context.isInputDisabled}
+                disabled={isInputDisabled}
               >
                 {SCHEMA_TYPE.map((item, index) => {
                   return (
@@ -213,13 +213,13 @@ class SchemaArray extends PureComponent {
               className="col-item col-item-mock"
             >
               <Input
-                addonAfter={
-                  <EditOutlined onClick={() => this.handleShowEdit("title")} />
-                }
+                // addonAfter={
+                //   <EditOutlined onClick={() => this.handleShowEdit("title")} />
+                // }
                 placeholder={LocaleProvider("title")}
                 value={items.title}
                 onChange={this.handleChangeTitle}
-                disabled={this.context.isInputDisabled}
+                disabled={isInputDisabled}
               />
             </Col>
             <Col
@@ -227,44 +227,42 @@ class SchemaArray extends PureComponent {
               className="col-item col-item-desc"
             >
               <Input
-                addonAfter={
-                  <EditOutlined
-                    onClick={() => this.handleShowEdit("description")}
-                  />
-                }
+                // addonAfter={
+                //   <EditOutlined
+                //     onClick={() => this.handleShowEdit("description")}
+                //   />
+                // }
                 placeholder={LocaleProvider("description")}
                 value={items.description}
                 onChange={this.handleChangeDesc}
-                disabled={this.context.isInputDisabled}
+                disabled={isInputDisabled}
               />
             </Col>
-            {!this.context.isInputDisabled && (
-              <Col
-                span={this.context.isMock ? 2 : 3}
-                className="col-item col-item-setting"
-              >
-                {this.context.isAllowSetting && (
-                  <span className="adv-set" onClick={this.handleShowAdv}>
-                    <Tooltip
-                      placement="top"
-                      title={LocaleProvider("adv_setting")}
-                    >
-                      <SettingOutlined />
-                    </Tooltip>
-                  </span>
-                )}
-                {items.type === "object" ? (
-                  <span onClick={this.handleAddChildField}>
-                    <Tooltip
-                      placement="top"
-                      title={LocaleProvider("add_child_node")}
-                    >
-                      <PlusOutlined className="plus" />
-                    </Tooltip>
-                  </span>
-                ) : null}
-              </Col>
-            )}
+            <Col
+              span={this.context.isMock ? 2 : 3}
+              className="col-item col-item-setting"
+            >
+              {this.context.isAllowSetting && !isInputDisabled && (
+                <span className="adv-set" onClick={this.handleShowAdv}>
+                  <Tooltip
+                    placement="top"
+                    title={LocaleProvider("adv_setting")}
+                  >
+                    <SettingOutlined />
+                  </Tooltip>
+                </span>
+              )}
+              {items.type === "object" && !isInputDisabled ? (
+                <span onClick={this.handleAddChildField}>
+                  <Tooltip
+                    placement="top"
+                    title={LocaleProvider("add_child_node")}
+                  >
+                    <PlusOutlined className="plus" />
+                  </Tooltip>
+                </span>
+              ) : null}
+            </Col>
           </Row>
           <div className="option-formStyle">
             {mapping(prefixArray, items, showEdit, showAdv)}
@@ -408,6 +406,7 @@ class SchemaItem extends PureComponent {
       .join(JSONPATH_JOIN_CHAR);
     let show = this.context.getOpenValue([prefixStr]);
     let showIcon = this.context.getOpenValue([prefixArrayStr]);
+    const { isInputDisabled } = this.context;
     return show ? (
       <div>
         <Row type="flex" justify="space-around" align="middle">
@@ -439,13 +438,13 @@ class SchemaItem extends PureComponent {
                             ? false
                             : data.required.indexOf(name) != -1
                         }
-                        disabled={this.context.isInputDisabled}
+                        disabled={isInputDisabled}
                       />
                     </Tooltip>
                   }
                   onChange={this.handleChangeName}
                   value={name}
-                  disabled={this.context.isInputDisabled}
+                  disabled={isInputDisabled}
                 />
               </Col>
             </Row>
@@ -456,7 +455,7 @@ class SchemaItem extends PureComponent {
               className="type-select-style"
               onChange={this.handleChangeType}
               value={value.type}
-              disabled={this.context.isInputDisabled}
+              disabled={isInputDisabled}
             >
               {SCHEMA_TYPE.map((item, index) => {
                 return (
@@ -493,13 +492,13 @@ class SchemaItem extends PureComponent {
             className="col-item col-item-mock"
           >
             <Input
-              addonAfter={
-                <EditOutlined onClick={() => this.handleShowEdit("title")} />
-              }
+              // addonAfter={
+              //   <EditOutlined onClick={() => this.handleShowEdit("title")} />
+              // }
               placeholder={LocaleProvider("title")}
               value={value.title}
               onChange={this.handleChangeTitle}
-              disabled={this.context.isInputDisabled}
+              disabled={isInputDisabled}
             />
           </Col>
 
@@ -508,37 +507,38 @@ class SchemaItem extends PureComponent {
             className="col-item col-item-desc"
           >
             <Input
-              addonAfter={
-                <EditOutlined
-                  onClick={() => this.handleShowEdit("description")}
-                />
-              }
+              // addonAfter={
+              //   <EditOutlined
+              //     onClick={() => this.handleShowEdit("description")}
+              //   />
+              // }
               placeholder={LocaleProvider("description")}
               value={value.description}
               onChange={this.handleChangeDesc}
-              disabled={this.context.isInputDisabled}
+              disabled={isInputDisabled}
             />
           </Col>
 
           <Col
             span={this.context.isMock ? 2 : 3}
-            className={`col-item col-item-setting ${
-              this.context.isInputDisabled && "hidden"
-            }`}
+            className="col-item col-item-setting"
           >
-            {this.context.isAllowSetting && (
+            {this.context.isAllowSetting && !isInputDisabled && (
               <span className="adv-set" onClick={this.handleShowAdv}>
                 <Tooltip placement="top" title={LocaleProvider("adv_setting")}>
                   <SettingOutlined />
                 </Tooltip>
               </span>
             )}
-            <span className="delete-item" onClick={this.handleDeleteItem}>
-              <CloseOutlined className="close" />
-            </span>
-            {value.type === "object" ? (
+            {!isInputDisabled && (
+              <span className="delete-item" onClick={this.handleDeleteItem}>
+                <CloseOutlined className="close" />
+              </span>
+            )}
+            {value.type === "object" && !isInputDisabled && (
               <DropPlus prefix={prefix} name={name} />
-            ) : (
+            )}
+            {value.type !== "object" && !isInputDisabled && (
               <span onClick={this.handleAddField}>
                 <Tooltip
                   placement="top"
