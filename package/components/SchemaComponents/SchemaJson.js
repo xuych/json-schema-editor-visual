@@ -138,7 +138,6 @@ class SchemaArray extends PureComponent {
   render() {
     const { data, prefix, showEdit, showAdv } = this.props;
     const items = data.items;
-    console.log(items, "items");
     let prefixArray = [].concat(prefix, "items");
 
     let prefixArrayStr = []

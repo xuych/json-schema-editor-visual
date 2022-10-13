@@ -72,14 +72,12 @@ class jsonSchema extends React.Component {
       if (!this.jsonData) {
         return message.error("json 数据格式有误");
       }
-      console.log(this.jsonData, "GenerateSchema");
       let jsonData = GenerateSchema(this.jsonData);
       this.Model.changeEditorSchemaAction({ value: jsonData });
     } else {
       if (!this.jsonSchemaData) {
         return message.error("json 数据格式有误");
       }
-      console.log(this.jsonSchemaData, "GenerateSchema");
       this.Model.changeEditorSchemaAction({ value: this.jsonSchemaData });
     }
     this.setState({ visible: false });
